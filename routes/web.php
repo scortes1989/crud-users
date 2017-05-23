@@ -11,6 +11,21 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::prefix('core')->namespace('Core')->middleware(['auth', 'admin'])->group(function() {
+    Route::get('users', 'UserController@index');
+    Route::get('users/create', 'UserController@create');
+    Route::post('users', 'UserController@store');
+    Route::get('users/{user}/edit', 'UserController@edit');
+    Route::put('users/{user}', 'UserController@update');
 });
