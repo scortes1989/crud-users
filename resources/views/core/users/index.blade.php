@@ -28,6 +28,7 @@
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>Rol</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -38,11 +39,16 @@
                     </td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ $user->role->name }}</td>
+                    <td>{{ $user->role ? $user->role->name : '' }}</td>
+                    <td>
+                        {{--
+                        @if($user->files)
+                            <img src="{{ url($user->files->path) }}">
+                        @endif
+                        --}}
+                    </td>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    {{ $users->links() }}
+@endforeach
+</tbody>
+</table>
 @endsection

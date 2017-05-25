@@ -35,3 +35,10 @@
         <p class="text-danger">{{ $errors->first('role_id') }}</p>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-4 form-group">
+        <label>Foto de Perfil</label>
+        <input type="file" name="photo">
+    </div>
+</div>

@@ -6,7 +6,7 @@
 
 <div class="container">
 
-    <form method="POST" action="{{ url('core/users') }}">
+    <form method="POST" action="{{ url('core/users') }}" enctype="multipart/form-data">
 
         {{ csrf_field() }}
 
