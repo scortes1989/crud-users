@@ -16,13 +16,21 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    public $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     public function index(Request $request)
     {
+
         //filtro con scopes, en el modelo user esta la logica
         //$users = User::filter($request)->withRole(1)->orderBy('name')->paginate(5);
 
         //with('relation') soluciona el problema de n + 1 (n queries por 1 registro)
-        $users = User::with('role')->orderBy('name')->get();
+        $users = $this->user->with('role')->orderBy('name')->get();
 
         return view('core.users.index', compact('users'));
     }
@@ -36,7 +44,7 @@ class UserController extends Controller
     {
         //usando transacciones de BD
         //DB::transaction(function() use($request) {
-            $user = User::create($request->only('name', 'email', 'password', 'role_id'));
+            $user = User::create($request->only('name', 'email', 'password', 'role_id', 'birthday'));
 
             /*if($request->hasFile('photo')) {
                 $path = $request->photo->store('photos', 'public');
@@ -48,7 +56,7 @@ class UserController extends Controller
 
             Mail::to($user->email)->send(new CreatedUser($user));
 
-            return $user;
+            return redirect('core/users');
         //});
     }
 

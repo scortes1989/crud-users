@@ -62,6 +62,11 @@ class User extends Authenticatable
         }
     }
 
+    public function setBirthdayAttribute($value)
+    {
+        $this->attributes['birthday'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+    }
+
     //scopes
     public function scopeFilter($query, Request $request)
     {

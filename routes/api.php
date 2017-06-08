@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 /*
@@ -15,4 +16,15 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user()->id;
+});
+
+
+Route::get('v1/core/users', function() {
+    $user = \Illuminate\Foundation\Auth\User::first();
+
+    \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\CreatedUser(User::first()));
+
+    return response()->json([
+        'data' => User::orderBy('name')->get(),
+    ]);
 });

@@ -26,6 +26,7 @@ $factory->define(User::class, function (Faker\Generator $faker) {
         'role_id' => function() {
             return factory(Role::class)->create()->id;
         },
+        'birthday' => $faker->date('d/m/Y'),
     ];
 });
 

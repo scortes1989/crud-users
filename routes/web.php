@@ -23,7 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('log', 'Storage\LogController@index');
 
-Route::prefix('core')->namespace('Core')->middleware(['auth', 'admin'])->group(function() {
+Route::prefix('core')->namespace('Core')->middleware(['auth'])->group(function() {
     Route::get('users', 'UserController@index');
     Route::get('users/create', 'UserController@create');
     Route::post('users', 'UserController@store');
