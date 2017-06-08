@@ -26,6 +26,7 @@ class UserStore extends FormRequest
     {
         return [
             'name' => 'required',
+            'email' => 'required',
         ];
     }
 
@@ -35,6 +36,7 @@ class UserStore extends FormRequest
             'name.required' => 'El nombre es obligatorio',
             'password.required' => 'Favor ingrese contraseña',
             'password.min' => 'Debe ingresar al menos 3 caracteres',
+            'email.required' => 'El email es obligatorio',
         ];
     }
 }

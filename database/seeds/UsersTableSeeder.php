@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'seba.cortes1989@gmail.com',
             'password' => '1234',
             'role_id' => Role::find(1)->id,
+            'api_token' => str_random(100),
         ]);
 
         factory(User::class, 5)->create();

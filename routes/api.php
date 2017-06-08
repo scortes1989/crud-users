@@ -19,12 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('v1/core/users', function() {
-    $user = \Illuminate\Foundation\Auth\User::first();
-
-    \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\CreatedUser(User::first()));
-
-    return response()->json([
-        'data' => User::orderBy('name')->get(),
-    ]);
+Route::prefix('core')->middleware('auth:api')->namespace('Core')->group(function() {
+    //GET -> users2.dev/api/v1/core/users
+    Route::get('users', 'UserController@index');
+    //POST -> users2.dev/api/v1/core/users
+    Route::post('users', 'UserController@store');
+    //GET -> users2.dev/api/v1/core/users/1
+    Route::get('users/{user}', 'UserController@show');
+    //PUT -> users2.dev/api/v1/core/users/1
+    Route::put('users/{user}', 'UserController@update');
+    //DELETE -> users2.dev/api/v1/core/users/1
+    Route::delete('users/{user}', 'UserController@destroy');
 });

@@ -2,22 +2,54 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Example Component</div>
+                <panel>
+                    <h3 slot="title">{{ title }}</h3>
 
-                    <div class="panel-body">
-                        I'm an example component!
-                    </div>
-                </div>
+                    {{ users }}
+
+                    <span :style="{ color: activeColor, fontSize: fontSize + 'px' }">{{ name }}</span>
+                </panel>
             </div>
         </div>
+
+
+        <roles></roles>
+        <users></users>
     </div>
 </template>
 
 <script>
+    import User from '../Models/User';
+
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        data: function () {
+            return {
+                title: '',
+                activeColor: 'blue',
+                fontSize: 12,
+                users: []
+            }
+        },
+
+        computed: {
+            title2() {
+                return this.title.toUpperCase();
+            }
+        },
+
+        props: ['name'],
+
+        created() {
+            this.index();
+        },
+
+        methods: {
+            index() {
+                this.users = User.get();
+            },
+            changeTitle() {
+                this.title = 'El titulo ha sido modificado';
+            }
         }
     }
 </script>
