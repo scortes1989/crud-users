@@ -25,13 +25,16 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-
         //filtro con scopes, en el modelo user esta la logica
         //$users = User::filter($request)->withRole(1)->orderBy('name')->paginate(5);
+
 
         //with('relation') soluciona el problema de n + 1 (n queries por 1 registro)
         $users = $this->user->with('role')->orderBy('name')->get();
 
+        return $users->groupBy('role_id');
+
+        
         return view('core.users.index', compact('users'));
     }
 

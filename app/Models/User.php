@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Traits\Core\TraitUserScope;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, Notifiable;
+    use SoftDeletes, Notifiable, TraitUserScope;
 
     //atributos que no seran guardados por asignacion masiva, lo contrario es usar $fillable
     protected $guarded = [];
@@ -63,27 +64,17 @@ class User extends Authenticatable
         }
     }
 
-    //scopes
-    public function scopeFilter($query, Request $request)
-    {
-        return $query->when($request->has('filter'), function($newQuery) use ($request) {
-            return $newQuery->where(function ($q) use ($request) {
-                $q->where('name', 'like', "%{$request->filter}%")->orWhere('email', 'like', "%{$request->filter}%");
-            });
-        });
-    }
-
-    public function scopeWithRole($query, $roleId)
-    {
-        return $query->with(['role' => function($query) use ($roleId) {
-            return $query->where('id', $roleId);
-        }]);
-    }
-
     //functions
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->role_id == 1;
+    }
+
+    public function regenerateToken()
+    {
+        $this->update([
+            'api_token' => str_random(100)
+        ]);
     }
 
 }

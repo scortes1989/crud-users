@@ -30,4 +30,8 @@ Route::prefix('core')->middleware('auth:api')->namespace('Core')->group(function
     Route::put('users/{user}', 'UserController@update');
     //DELETE -> users2.dev/api/v1/core/users/1
     Route::delete('users/{user}', 'UserController@destroy');
+
+    //GET -> users2.dev/api/v1/core/roles
+    Route::get('roles', 'RoleController@index');
+
 });

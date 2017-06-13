@@ -2,8 +2,6 @@
 
 @section('content')
 
-    <example name="loquesea"></example>
-
-    <example name="otro ejemplo"></example>
+    <example name="Usuarios"></example>
 
 @endsection

@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::orderBy('name')->when($request->has('all'), function ($query) {
+        $query = User::with('role', 'files')->orderBy('name')->when($request->has('all'), function ($query) {
             return $query->withTrashed();
         });
 
@@ -36,6 +36,14 @@ class UserController extends Controller
         ]);
 
         $user = User::create($request->only('name', 'email', 'password', 'role_id', 'api_token'));
+
+        if($request->hasFile('file')) {
+            $path = $request->file->store('users', 'public');
+
+            $user->files()->create([
+                'path' => $path,
+            ]);
+        }
 
         return response()->json([
             'data' => $user,

@@ -4,6 +4,8 @@ namespace Tests\Feature\Api;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -20,7 +22,7 @@ class UserTest extends TestCase
             ->get('api/v1/core/users')
             ->assertStatus(200)
             ->assertJson([
-                'data' => User::orderBy('name')->get()->toArray(),
+                'data' => User::with('role', 'files')->orderBy('name')->get()->toArray(),
             ]);
     }
 
@@ -39,6 +41,8 @@ class UserTest extends TestCase
 
     function testStoreAUser()
     {
+        Storage::fake('users');
+
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create();
 
@@ -47,6 +51,7 @@ class UserTest extends TestCase
             'email' => 'test@loquesea.cl',
             'password' => 1234,
             'role_id' => $role->id,
+            'file' => UploadedFile::fake()->image('avatar.jpg'),
         ];
 
         $this->actingAs($user, 'api')
@@ -60,6 +65,11 @@ class UserTest extends TestCase
             'name' => $parameters['name'],
             'email' => $parameters['email'],
             'role_id' => $parameters['role_id'],
+        ]);
+
+        $this->assertDatabaseHas('files', [
+            'fileable_id' => User::latest('id')->first()->id,
+            'fileable_type' => User::class,
         ]);
     }
 

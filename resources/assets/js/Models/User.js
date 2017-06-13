@@ -1,6 +1,12 @@
 class User {
-    static get() {
-        return ['sebastian', 'oscar', 'miguel', 'david', 'israel'];
+    static get(then) {
+        axios.get('/api/v1/core/users')
+            .then(({data}) => then(data.data));
+    }
+
+    static show(element, then) {
+        axios.get('/api/v1/core/users/' + element)
+            .then(({data}) => then(data.data));
     }
 }
 
